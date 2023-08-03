@@ -34,12 +34,14 @@ class YoutubePlayerEventHandler {
   void call(JavaScriptMessage javaScriptMessage) {
     final data = Map.from(jsonDecode(javaScriptMessage.message));
 
-    for (final entry in data.entries) {
+    if (data != null) {
+      for (final entry in data.entries) {
       if (entry.key == 'ApiChange') {
         onApiChange(entry.value);
       } else {
         _events[entry.key]?.call(entry.value);
       }
+    }
     }
   }
 
@@ -125,7 +127,9 @@ class YoutubePlayerEventHandler {
 
   /// This event fires when the player receives information about video states.
   void onVideoState(Object data) {
-    videoStateController.add(YoutubeVideoState.fromJson(data.toString()));
+    if (data != null) {
+      videoStateController.add(YoutubeVideoState.fromJson(data.toString()));
+    }
   }
 
   /// Returns a [Future] that completes when the player is ready.
